@@ -1,8 +1,9 @@
 const request = require("supertest");
 const app = require("../src/app");
 
-test("GET / should return message", async () => {
+test("GET / should load CloudOps dashboard", async () => {
   const response = await request(app).get("/");
 
-  expect(response.text).toBe("DevOps CI/CD Project Running");
+  expect(response.statusCode).toBe(200);
+  expect(response.text).toContain("CloudOps Monitoring Dashboard");
 });
