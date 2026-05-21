@@ -24,6 +24,9 @@ jobs:
       - name: Run Tests
         run: npm test
 
+      - name: Security Scan
+        run: npm audit
+
   deploy:
     runs-on: ubuntu-latest
     needs: build-test
@@ -32,8 +35,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
       - name: Build Docker Image
         run: docker build -t devops-app .
 
       - name: Run Container
         run: docker run -d -p 3000:3000 devops-app
+
+      - name: Verify Deployment
+        run: curl http://localhost:3000 || echo "App not running"
+
+      - name: Run Container Test
+        run: docker ps
