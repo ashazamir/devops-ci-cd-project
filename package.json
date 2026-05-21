@@ -1,7 +1,7 @@
 {
   "name": "devops-project",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project demonstrates a CI/CD pipeline using GitHub Actions and Node.js.",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
@@ -18,5 +18,16 @@
     "eslint": "^10.4.0",
     "jest": "^30.4.2",
     "supertest": "^7.2.2"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashazamir/devops-ci-cd-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ashazamir/devops-ci-cd-project/issues"
+  },
+  "homepage": "https://github.com/ashazamir/devops-ci-cd-project#readme"
 }
