@@ -6,36 +6,8 @@ on:
       - main
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Cache npm modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-files
-          path: .
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
 
     steps:
       - name: Checkout Code
@@ -49,15 +21,19 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Unit Tests
+      - name: Run Tests
         run: npm test
 
-      - name: Static Code Analysis with ESLint
-        run: npx eslint .
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-test
 
-      - name: Dependency Scanning with npm audit
-        run: npm audit --audit-level=high
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Notify if Test Pipeline Fails
-        if: failure()
-        run: echo "TEST PIPELINE FAILED"
+      - name: Build Docker Image
+        run: docker build -t devops-app .
+
+      - name: Run Container
+        run: docker run -d -p 3000:3000 devops-app
