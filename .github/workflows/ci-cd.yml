@@ -35,6 +35,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASS }}" | docker login -u "${{ secrets.DOCKER_USER }}" --password-stdin
+
       - name: Build Docker Image
         run: docker build -t devops-app .
 
